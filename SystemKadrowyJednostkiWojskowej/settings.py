@@ -78,7 +78,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'systemkadrowyjednostkiwojskowej',
-        'USER': 'root'
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
     }
 }
 
