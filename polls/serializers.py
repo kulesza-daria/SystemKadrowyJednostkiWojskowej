@@ -7,7 +7,7 @@ def validate(data):
     if data > date.today():
         raise ValidationError(
             message('%(data) data z przyszłości'),
-            params={'value': value},
+            params={'value': data},
         )
 
 class ZolnierzSerializer(serializers.Serializer):
