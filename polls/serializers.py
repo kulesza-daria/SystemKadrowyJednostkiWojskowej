@@ -1,13 +1,21 @@
 from rest_framework import serializers
 from datetime import date
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as message
 
+def validate(data):
+    if data > date.today():
+        raise ValidationError(
+            message('%(data) data z przyszłości'),
+            params={'value': value},
+        )
 
 class ZolnierzSerializer(serializers.Serializer):
     id_zolnierza = serializers.IntegerField(read_only=True)
     imie = serializers.CharField(max_length=45, allow_null=False)
     nazwisko = serializers.CharField(max_length=45, allow_null=False)
-    data_urodzenia = serializers.DateField(allow_null=False)
-    telefon = serializers.CharField(max_length=15, allow_null=True)
+    data_urodzenia = serializers.DateField(allow_null=False, validators=[validate])
+    telefon = serializers.CharField(max_length=9, allow_null=True)
     specjalnosc = serializers.CharField(max_length=90, allow_null=True)
     stanowisko_etatowe = serializers.CharField(max_length=90, allow_null=False)
     zameldowanie = serializers.CharField(max_length=200, allow_null=False)
@@ -40,7 +48,7 @@ class WnioskiSerializer(serializers.Serializer):
     zolnierz = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
     rodzaj_wniosku = serializers.CharField(max_length=45, allow_null=False)
     status = serializers.CharField(max_length=45, allow_null=False)
-    data_zlozenia = serializers.CharField(max_length=45, default=date.today, allow_null=False)
+    data_zlozenia = serializers.DateField(max_length=45, default=date.today, allow_null=False, validators=[validate])
 
 
 class Wyjazdy_sluzboweSerializer(serializers.Serializer):
