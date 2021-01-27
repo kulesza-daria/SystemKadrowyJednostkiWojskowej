@@ -12,13 +12,19 @@ class Zolnierz(models.Model):
     stanowisko_etatowe = models.CharField(max_length=90)
     zameldowanie = models.TextField(null=False)
 
+    class Meta:
+        db_table = 'zolnierze'
+
 
 class Kontrakty(models.Model):
     id_kontraktu = models.AutoField(primary_key=True)
-    zolnierz = models.ForeignKey(Zolnierz, on_delete=models.CASCADE)
+    zolnierz = models.ForeignKey(Zolnierz, related_name='wynagrodzenie', on_delete=models.CASCADE)
     poczatek_kontraktu = models.DateField(default=date.today, null=False)
     koniec_kontraktu = models.DateField(null=False)
     wynagrodzenie = models.DecimalField(max_digits=9, decimal_places=2, default=3200)
+
+    class Meta:
+        db_table = 'kontrakty'
 
 
 class Ekwipunek(models.Model):
@@ -40,7 +46,7 @@ class Wnioski(models.Model):
     zolnierz = models.ForeignKey(Zolnierz, on_delete=models.CASCADE)
     rodzaj_wniosku = models.CharField(max_length=45)
     status = models.CharField(max_length=45)
-    data_zlozenia = models.CharField(max_length=45, default=date.today, null=False)
+    data_zlozenia = models.DateField()
 
 
 class Wyjazdy_sluzbowe(models.Model):
